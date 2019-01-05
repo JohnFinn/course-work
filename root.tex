@@ -225,62 +225,43 @@
 для автоматизации выше описанных процессов в предприятии применяются github.com как система хранения кода,
 YouTrack, как система отслеживания задач и управления проектом, и TeamCity, как система автоматического развёртывания.
 
-github.com
-    возможность создавать команды для ограничения прав
-    ограничение слияния с основной веткой
-    есть api
-YouTrack
-интеграция с гитхабом
+\paragraph{github.com}
+\begin{enumerate}
+    \item{возможность создавать команды для ограничения прав}
+    \item{ограничение слияния с основной веткой}
+    \item{есть api}
+\end{enumerate}
 
-Bug  issue tracking
+\paragraph{YouTrack}
+\begin{enumerate}
+    % Connect external tools with YouTrack to enhance your productivity and improve your working process! Integrate with TeamCity to automatically set the value for the ‘Fixed in build’ field in YouTrack when an issue is closed in a successful build.
+    \item{интеграция с GitHub, Bitbucket, GitLab для доступа к коммитам. Интеграция с TeamCity.}
+    %YouTrack lets you track and manage issues from the moment they’re reported to the moment they’re fixed. Easily create issues, add tags, watchers, modify custom fields, set the priority, and edit added attachments with a built-in image editor. Configure your personal notifications.
+    \item{слежение и управление задачами(issue) момента создания до момента выполнения. Создание задач, добавление тэгов, изменение пользовательских полей, установление приоритета, настройка уведомлений}
+    % Agile boards in YouTrack are designed to help teams follow a wide range of agile project management processes. You can create Scrum, Kanban, or Scrumban boards.
+    \item{Agile доски}
+    % A variety of reports are available to help you analyze and manage projects and teams activities. Create private reports or configure reports that you share with your team.
+    \item{различные отчёты для анализирования и управления проектами}
+    
+    % The Time Tracking features let you and your team report the amount of time spent working on issues in your project. Estimate how much time you expect to spend to resolve each issue, add work items to the issues along with the spent time, and create summary reports to see the total amount of time spent on the different types of work.
+    \item{слежение за временем}
+    % YouTrack is very customizable! Whether it’s issue fields, workflows, notifications or a language – you can configure it all to your needs.
+    \item{добавление пользовательских полей к задачам и Agile доскам}
+\end{enumerate}
 
-YouTrack lets you track and manage issues from the moment they’re reported to the moment they’re fixed. Easily create issues, add tags, watchers, modify custom fields, set the priority, and edit added attachments with a built-in image editor. Configure your personal notifications.
-
-Never worry about closing the tab while creating an issue – YouTrack keeps drafts.
-
-Agile Boards
-
-Agile boards in YouTrack are designed to help teams follow a wide range of agile project management processes. You can create Scrum, Kanban, or Scrumban boards.
-
-Reporting
-
-A variety of reports are available to help you analyze and manage projects and teams activities. Create private reports or configure reports that you share with your team.
-
-Get insights into how your team is performing and how the issues are distributed over a project. Use dashboards for an overview of your personal and team processes. Add reports as widgets, or create your own personal widgets if you need more data.
-
-
-Time management
-
-The Time Tracking features let you and your team report the amount of time spent working on issues in your project. Estimate how much time you expect to spend to resolve each issue, add work items to the issues along with the spent time, and create summary reports to see the total amount of time spent on the different types of work.
-
-Use the pre-configured workflows to automatically track time when you start working on issues, or create your own if you prefer a specific method of tracking.
-
-
-Planning
-
-Use a Gantt Chart for an overview of the flow of your project plan. Follow the progress of your projects, estimate time, and track the results. Configure the chart to show issues from multiple projects, limit the amount of work in progress, and control how many levels of subtasks are included in the report.
-
-Customization
 https://www.jetbrains.com/youtrack/features/
-YouTrack is very customizable! Whether it’s issue fields, workflows, notifications or a language – you can configure it all to your needs.
-
-Use workflows to automate the lifecycle of your issues and projects. Easily notify teams about events, enforce policies, execute periodic tasks, and support existing business processes. 
-
-If you don’t follow any methodology, you can still create and configure a board that gives you an alternative view of the issues your team is responsible for, or even a personal board to track your personal responsibilities.
-
-Integrations
-
-Connect external tools with YouTrack to enhance your productivity and improve your working process! Integrate with TeamCity to automatically set the value for the ‘Fixed in build’ field in YouTrack when an issue is closed in a successful build.
 
 
-Connect YouTrack to a repository in GitHub, Bitbucket, or GitLab to access VCS commits directly from an issue in YouTrack. Use Zendesk Integration to sync tickets between YouTrack and Zendesk.
 https://youtrack-support.jetbrains.com/hc/en-us/articles/206546119-What-hardware-requirements-does-YouTrack-have-
 core i3
     1GB disk
     1.5 Gb RAM
     развернуть можно на своём сервере (в докере или jar) на серверах jetbrains
     есть api
-TeamCity
+\paragraph{TeamCity}
+\begin{enumerate}
+    \item{интеграция c github.com}
+\end{enumerate}
 интеграция с гитхабом
 
 есть отдельно сервер TeamCity и множество build agent'ов 
