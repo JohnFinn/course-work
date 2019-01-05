@@ -14,6 +14,8 @@
 \tableofcontents
 \pagebreak
 
+\newcommand{\myparagraph}[1]{\paragraph{#1}\mbox{}\\}
+
 \section{Теоритический этап}
 % определение понятий «информационная система»,
 % используемых видов архитектур ИС, элементов, составляющих используемые виды
@@ -222,17 +224,22 @@
 % программных средств, рекомендуемых производителем вариантов развертывания этих
 % средств и средств их интеграции между собой и с внешними системами.
 
-для автоматизации выше описанных процессов в предприятии применяются github.com как система хранения кода,
+Для автоматизации выше описанных процессов в предприятии применяются github.com как система хранения кода,
 YouTrack, как система отслеживания задач и управления проектом, и TeamCity, как система автоматического развёртывания.
 
-\paragraph{github.com}
+\myparagraph{github.com}
+Не надо развертывать, распространяется как SaaS решение.
 \begin{enumerate}
     \item{возможность создавать команды для ограничения прав}
     \item{ограничение слияния с основной веткой}
-    \item{есть api}
+    \item{есть API, клиенты для .NET, Go, JavaScript}
 \end{enumerate}
 
-\paragraph{YouTrack}
+
+\myparagraph{YouTrack}
+Развернуть можно на своём сервере (в докере или jar) или на серверах jetbrains.
+при развертывании на своих серверах потребуется core i3, 1GB disk, 1.5 Gb RAM.
+
 \begin{enumerate}
     % Connect external tools with YouTrack to enhance your productivity and improve your working process! Integrate with TeamCity to automatically set the value for the ‘Fixed in build’ field in YouTrack when an issue is closed in a successful build.
     \item{интеграция с GitHub, Bitbucket, GitLab для доступа к коммитам. Интеграция с TeamCity.}
@@ -247,52 +254,29 @@ YouTrack, как система отслеживания задач и упра�
     \item{слежение за временем}
     % YouTrack is very customizable! Whether it’s issue fields, workflows, notifications or a language – you can configure it all to your needs.
     \item{добавление пользовательских полей к задачам и Agile доскам}
+    \item{есть API, клиенты для .NET и PHP}
 \end{enumerate}
 
-https://www.jetbrains.com/youtrack/features/
-
-
-https://youtrack-support.jetbrains.com/hc/en-us/articles/206546119-What-hardware-requirements-does-YouTrack-have-
-core i3
-    1GB disk
-    1.5 Gb RAM
-    развернуть можно на своём сервере (в докере или jar) на серверах jetbrains
-    есть api
-\paragraph{TeamCity}
+\myparagraph{TeamCity}
+Сам TeamCity состоит из http сервера и нескольких build agent'ов.
+Для одного из них потребуется 2GB RAM, dual-core CPU, 10GB долговременной памяти.
 \begin{enumerate}
-    \item{интеграция c github.com}
+    \item{интеграция c CVS}
+    % Build, check and run automated tests on the server even before committing your changes – keeping your code base clean at all times.
+    \item{сборка и запуск автотестов перед коммитом изменений}
+    % Form your project tree to inherit parent settings and permissions.
+    % Templates
+    \item{иерархия проектов в виде дерева для наследования настроек и прав}
+    % Create templates with common settings and inherit any number of build configurations from them.
+    \item{создание шаблонов}
+    % Build chains and dependencies
+    \item{создание зависимостей}
+    % Break down a single build procedure into parts that can be run in sequence or in parallel.
+    \item{разбитие процедуры на части для возможности запуска  параллельно}
+    \item{есть отдельно сервер TeamCity и множество build agent'ов}
+    \item{есть API и клиент на kotlin}
 \end{enumerate}
-интеграция с гитхабом
-
-есть отдельно сервер TeamCity и множество build agent'ов 
-
-Remote run and pre-tested commit
-
-Build, check and run automated tests on the server even before committing your changes – keeping your code base clean at all times.
-
-roject hierarchy
-
-Form your project tree to inherit parent settings and permissions.
-Templates
-
-Create templates with common settings and inherit any number of build configurations from them.
-Build chains and dependencies
-
-Break down a single build procedure into parts that can be run in sequence or in parallel.
-
-
-
-Comprehensive VCS integration
-Feature Branches
-
-Using feature branches for development? TeamCity will detect and build changes in your branch, as well as merge it to the master.
-Versioned Settings
-
-Synchronize your project settings with VCS, and never lose track of them again.
-
-
 \pagebreak
-
 
 \section{Синтез определенных уровней архитектуры ИС}
 % (непосредственно проектирование архитектуры ИС на уровне (уровнях), определяемых
@@ -321,12 +305,13 @@ Synchronize your project settings with VCS, and never lose track of them again.
 \pagebreak
 
 \section{Список использованных источников}
+business.radario.ru\\
+приватная вики на гитхабе\\
+jetbrains.com/youtrack/features/\\
+youtrack-support.jetbrains.com/hc/en-us/articles/206546119-What-hardware-requirements-does-YouTrack-have-\\
+octopus.com/docs/installation/requirements\\
 
-business.radario.ru
-
-приватная вики на гитхабе
-
-
+результаты сканирования серверов
 \begin{lstlisting}[language=bash, basicstyle=\ttfamily\small]
     $ nmap -O github.com
 \end{lstlisting}
