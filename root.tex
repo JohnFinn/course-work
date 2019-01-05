@@ -5,6 +5,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[russian]{babel}
 \usepackage{graphicx}
+\usepackage{listings}
+\usepackage{color}
 
 \begin{document}
 \maketitle
@@ -141,49 +143,65 @@
 \dia{pictures/7.png}{развёртывание}
 
 \subsection{функциональные требования}
-требуется следить за задачами:
-    1) у задачи должны быть множество статусов
-    [открыта, в процессе, готова к ревью, готова к тестированию, готова к развёртыванию, работа завершена]
-    работа завершена требуется для задач для которых не нужно развертывание(например написание своих библиотек)
-    2) должно быть видно кто работает над задачей, кто её тестирует, а также её описание
-    3) должна быть возможность добавлять подзадачи
-    4) возможность оценивания времени, требуемого для решения
-    5) возможность создавать задачи, назначать их на людей, распределять по приоритету
-    api для добавления нужной функциональности
-к системе хранения кода
-    удобно смотреть разницу в коде
-    оставление комментариев, замечаний
-    составление описания изменения
-    api для добавления нужной функциональности
-сисема автоматического развертывания
-    гибкие настройки связи с сервером развёртывания
-    интеграция с системой хранения кода
-    возможность запуски автотестов перед развёртыванием
-    api для добавления нужной функциональности
+\paragraph{Система слежения за задачами}
+\begin{enumerate}
+    \item{у задачи должны быть множество статусов:
+    открыта, в процессе, готова к ревью, готова к тестированию, готова к развёртыванию, работа завершена}
+    \item{должно быть видно кто работает над задачей, кто её тестирует, а также её описание}
+    \item{должна быть возможность добавлять подзадачи}
+    \item{возможность оценивания времени, требуемого для решения}
+    \item{возможность создавать задачи, назначать их на людей, распределять по приоритету}
+    \item{нужно чтобы у системы было API}
+    \item{нужна интеграция с системой хранения кода}
+\end{enumerate}
+
+\paragraph{Системе хранения кода}
+\begin{enumerate}
+    \item{возможность удобно смотреть разницу в коде}
+    \item{оставление комментариев, замечаний}
+    \item{запрет на слияние без ревью}
+    \item{составление описания изменения}
+    \item{нужно чтобы у системы было API}
+\end{enumerate}
+
+\paragraph{Система автоматического развертывания}
+\begin{enumerate}
+    \item{гибкие настройки связи с сервером развёртывания}
+    \item{интеграция с системой хранения кода}
+    \item{возможность запуски автотестов перед развёртыванием}
+    \item{мониторинг за процессом, просмотр ошибок компиляции}
+    \item{нужно чтобы у системы было API}
+\end{enumerate}
 
 \subsection{нефункциональные требования}
-код должен быть приватным
-ограничение прав на работу с основной веткой
-запрет на слияние без ревью
-безопастность и надежность сдесь важнее производительности (лучше подождать немного, чем в один прекрасный момент потерять весь свой код, или обнаружить что кто-то другой получил доступ к нему).
+\paragraph{Система хранения кода}
+\begin{enumerate}
+    \item{код не должен попасть в чужие руки}
+    \item{возможность настройки прав для доступа к репохиториям и слияния с основной веткой}
+    \item{безопастность и надежность сдесь важнее производительности (лучше подождать немного, чем в один прекрасный момент потерять весь свой код, или обнаружить что кто-то другой получил доступ к нему).}
+\end{enumerate}
 
-на систему контроля задач не накладываются требования по безопасности (в пользу надежности и производительности)
-она должна быть производительна, т.к. не продполагается выделение производительных серверов под эту систему.
-надежность тоже требуется высокая чтобы работа не останавливалась.
+\paragraph{Cистема контроля задач}
+\begin{enumerate}
+    \item{не накладываются большие требования по безопасности (в пользу удобства работы, надежности и производительности)}
+    \item{она должна быть производительна, т.к. не продполагается выделение производительных серверов под эту систему.}
+    \item{надежность тоже требуется высокая чтобы работа не останавливалась.}
+\end{enumerate}
 
-система развертывания
- должна быть система прав
-
- в этой системе предполагается долтуп к серверам, на которых будет происходить развёртывание.
- поэтому она должна быть безопасная, чтобы никто не смог получить к ней доступ, или используя уязвимость
- получить доступ к серверам.
-
- компиляция - требовательная по ресурсам операция. Нужно что бы она не мешала обрабатывать серверам запросы.
- должна быть возможность производить сборку на отдельных серверах, чтобы не перегружать существующие.
-
- система должна быть надёжна, так как если она сломается, никто не будет знать что делать, так как все привыкнут
- её использовать и не будут знать как происходит механизм развертывания.
-
+\paragraph{Cистема развертывания}
+\begin{enumerate}  
+    \item{должна быть система прав}
+   
+    \item{в этой системе предполагается долтуп к серверам, на которых будет происходить развёртывание.
+    поэтому она должна быть безопасная, чтобы никто не смог получить к ней доступ, или используя уязвимость
+    получить доступ к серверам.}
+   
+    \item{компиляция - требовательная по ресурсам операция. Нужно что бы она не мешала обрабатывать серверам запросы.
+    должна быть возможность производить сборку на отдельных серверах, чтобы не перегружать существующие.}
+   
+    \item{система должна быть надёжна, так как если она сломается, никто не будет знать что делать, так как все привыкнут
+    её использовать и не будут знать как происходит механизм развертывания.}
+\end{enumerate}   
 
 \pagebreak
 
@@ -203,6 +221,95 @@
 % процессов, детальное описание требований к ИТ-инфраструктуре со стороны выбранных
 % программных средств, рекомендуемых производителем вариантов развертывания этих
 % средств и средств их интеграции между собой и с внешними системами.
+
+для автоматизации выше описанных процессов в предприятии применяются github.com как система хранения кода,
+YouTrack, как система отслеживания задач и управления проектом, и TeamCity, как система автоматического развёртывания.
+
+github.com
+    возможность создавать команды для ограничения прав
+    ограничение слияния с основной веткой
+    есть api
+YouTrack
+интеграция с гитхабом
+
+Bug  issue tracking
+
+YouTrack lets you track and manage issues from the moment they’re reported to the moment they’re fixed. Easily create issues, add tags, watchers, modify custom fields, set the priority, and edit added attachments with a built-in image editor. Configure your personal notifications.
+
+Never worry about closing the tab while creating an issue – YouTrack keeps drafts.
+
+Agile Boards
+
+Agile boards in YouTrack are designed to help teams follow a wide range of agile project management processes. You can create Scrum, Kanban, or Scrumban boards.
+
+Reporting
+
+A variety of reports are available to help you analyze and manage projects and teams activities. Create private reports or configure reports that you share with your team.
+
+Get insights into how your team is performing and how the issues are distributed over a project. Use dashboards for an overview of your personal and team processes. Add reports as widgets, or create your own personal widgets if you need more data.
+
+
+Time management
+
+The Time Tracking features let you and your team report the amount of time spent working on issues in your project. Estimate how much time you expect to spend to resolve each issue, add work items to the issues along with the spent time, and create summary reports to see the total amount of time spent on the different types of work.
+
+Use the pre-configured workflows to automatically track time when you start working on issues, or create your own if you prefer a specific method of tracking.
+
+
+Planning
+
+Use a Gantt Chart for an overview of the flow of your project plan. Follow the progress of your projects, estimate time, and track the results. Configure the chart to show issues from multiple projects, limit the amount of work in progress, and control how many levels of subtasks are included in the report.
+
+Customization
+https://www.jetbrains.com/youtrack/features/
+YouTrack is very customizable! Whether it’s issue fields, workflows, notifications or a language – you can configure it all to your needs.
+
+Use workflows to automate the lifecycle of your issues and projects. Easily notify teams about events, enforce policies, execute periodic tasks, and support existing business processes. 
+
+If you don’t follow any methodology, you can still create and configure a board that gives you an alternative view of the issues your team is responsible for, or even a personal board to track your personal responsibilities.
+
+Integrations
+
+Connect external tools with YouTrack to enhance your productivity and improve your working process! Integrate with TeamCity to automatically set the value for the ‘Fixed in build’ field in YouTrack when an issue is closed in a successful build.
+
+
+Connect YouTrack to a repository in GitHub, Bitbucket, or GitLab to access VCS commits directly from an issue in YouTrack. Use Zendesk Integration to sync tickets between YouTrack and Zendesk.
+https://youtrack-support.jetbrains.com/hc/en-us/articles/206546119-What-hardware-requirements-does-YouTrack-have-
+core i3
+    1GB disk
+    1.5 Gb RAM
+    развернуть можно на своём сервере (в докере или jar) на серверах jetbrains
+    есть api
+TeamCity
+интеграция с гитхабом
+
+есть отдельно сервер TeamCity и множество build agent'ов 
+
+Remote run and pre-tested commit
+
+Build, check and run automated tests on the server even before committing your changes – keeping your code base clean at all times.
+
+roject hierarchy
+
+Form your project tree to inherit parent settings and permissions.
+Templates
+
+Create templates with common settings and inherit any number of build configurations from them.
+Build chains and dependencies
+
+Break down a single build procedure into parts that can be run in sequence or in parallel.
+
+
+
+Comprehensive VCS integration
+Feature Branches
+
+Using feature branches for development? TeamCity will detect and build changes in your branch, as well as merge it to the master.
+Versioned Settings
+
+Synchronize your project settings with VCS, and never lose track of them again.
+
+
 \pagebreak
 
 
@@ -229,13 +336,82 @@
 % сопровождается диаграммами, выполненными в соответствии с требованиями нотации
 % UML.
 
-\pagebreak
 
+\pagebreak
 
 \section{Список использованных источников}
 
 business.radario.ru
 
 приватная вики на гитхабе
+
+
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\small]
+    $ nmap -O github.com
+\end{lstlisting}
+\begin{lstlisting}[frame=lines, basicstyle=\ttfamily\small]
+    ...
+    PORT     STATE SERVICE
+    22/tcp   open  ssh
+    80/tcp   open  http
+    443/tcp  open  https
+    9418/tcp open  git
+    Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+    Device type: specialized|storage-misc
+    Running (JUST GUESSING): Crestron 2-Series (87%), HP embedded (85%)
+    OS CPE: cpe:/o:crestron:2_series cpe:/h:hp:p2000_g3
+    Aggressive OS guesses: Crestron XPanel control system (87%), HP P2000 G3 NAS device (85%)
+    No exact OS matches for host (test conditions non-ideal).
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\small]
+    $ nmap -O ***.myjetbrains.com
+\end{lstlisting}
+
+\begin{lstlisting}[frame=lines, basicstyle=\ttfamily\small]
+    ...
+    PORT    STATE SERVICE
+    80/tcp  open  http
+    443/tcp open  https
+    Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+    Device type: general purpose|phone|WAP|PBX
+    Running (JUST GUESSING): Linux 3.X|4.X|2.6.X (97%), Google Android 4.X|4.1.X (91%), Vodavi embedded (87%)
+    OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4 cpe:/o:google:android:4.0 cpe:/o:google:android:4.1.2 cpe:/o:linux:linux_kernel:3.18 cpe:/o:linux:linux_kernel:4.1 cpe:/o:linux:linux_kernel:2.6.32 cpe:/h:vodavi:xts-ip
+    Aggressive OS guesses: Linux 3.10 - 4.11 (97%), Android 4.0 (91%), Android 4.1.2 (90%), OpenWrt Chaos Calmer 15.05 (Linux 3.18) or Designated Driver (Linux 4.1 or 4.4) (90%), DD-WRT v3.0 (Linux 4.4.2) (90%), Linux 2.6.32 (90%), Linux 3.2 - 3.10 (90%), Linux 3.2 - 3.16 (90%), Linux 3.2 - 3.8 (90%), Linux 3.18 (89%)
+    No exact OS matches for host (test conditions non-ideal).
+    ...
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\small]
+    $ nmap -O m***.ru
+\end{lstlisting}
+
+\begin{lstlisting}[frame=lines, basicstyle=\ttfamily\small]
+    ...
+    PORT    STATE SERVICE
+    80/tcp  open  http
+    443/tcp open  https
+    Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+    Device type: general purpose
+    Running: Microsoft Windows 2012
+    ...
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\small]
+    $ nmap -O -Pn bo**.ru
+\end{lstlisting}
+
+\begin{lstlisting}[frame=lines, basicstyle=\ttfamily\small]
+    ...
+    PORT     STATE SERVICE
+    80/tcp   open  http
+    81/tcp   open  hosts2-ns
+    3389/tcp open  ms-wbt-server
+    9090/tcp open  zeus-admin
+    Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+    Device type: general purpose|phone
+    Running (JUST GUESSING): Microsoft Windows 2012|10|7|Phone (92%), FreeBSD 6.X (85%)
+    ...
+\end{lstlisting}
 
 \end{document}
