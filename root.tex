@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{cite}
 
 \begin{document}
 \maketitle
@@ -57,7 +58,7 @@
 инструменты для работы с ценами и повышения лояльности зрителей (абонементы, промокоды).
 Также есть функционал по началу рекламных кампаний и рассылке.
 
-Есть централизованная служба поддержки покупателей (возвраты, консультации)
+Есть централизованная служба поддержки покупателей (возвраты, консультации) \cite{radario}.
 
 \paragraph{выделяеться несколько контуров управления}
 \begin{enumerate}
@@ -76,7 +77,7 @@
 за ними, а всё это реализовано, через личный кабинет на сайте, нужно всё это разрабатывать
 и поддерживать.
 
-\paragraph{процессы контура управления Разработка}
+\paragraph{Процессы контура управления разработка \cite{wiki}}
 \begin{enumerate}
     \item{распределение задач на спринт}
     \item{выполнение задачи}
@@ -101,6 +102,7 @@
 либо автоматически (если автоматическая сборка и автотесты уже настроены).
 На время развёртывания основных проектов (не микросервисов) другим разработчикам нужно подождать
 чтобы не развёртывать одновременно. Для этой цели о развёртываниях пишутся сообщения в чат в slack.
+\cite{wiki}
 
 \paragraph{информационные объекты}
 \begin{enumerate}
@@ -129,14 +131,14 @@
 \newcommand{\dia}[2]{
     \begin{figure}[!h]
         \includegraphics[width=\textwidth]{#1}
-        \caption{#2}
+        \caption{#2 \cite{wiki}}
     \end{figure}
     \pagebreak
 }
 
 \begin{figure}[h!]
     \includegraphics[height=6in]{pictures/2.png}
-    \caption{контур разработки}
+    \caption{контур разработки \cite{wiki}}
 \end{figure}
 \pagebreak
 \dia{pictures/3.png}{scram meeting}
@@ -254,13 +256,13 @@ YouTrack, как система отслеживания задач и упра�
 
 Система с избытком отвечает функциональным требованиям.\\
 Развернуть можно на своём сервере (в докере или jar) или на серверах jetbrains.
-При развертывании на своих серверах потребуется core i3, 1GB disk, 1.5 Gb RAM.
+При развертывании на своих серверах потребуется core i3, 1GB disk, 1.5 Gb RAM. \cite{youtrack_requirements}
 Однако удобнее развернуть на сервере jetbrains (потому же почему и github).
 
 Интеграция с другими системами (guthub.com) есть встроенная, однако если её не достаточно, воспользоватся клиентом на .NET
 YouTrackSharp, или же неписать своего, использующего доступный API.
 \\\\
-\textbf{функциональные возможности}ы
+\textbf{функциональные возможности \cite{youtrack}}
 \begin{enumerate}
     % Connect external tools with YouTrack to enhance your productivity and improve your working process! Integrate with TeamCity to automatically set the value for the ‘Fixed in build’ field in YouTrack when an issue is closed in a successful build.
     \item{интеграция с GitHub, Bitbucket, GitLab для доступа к коммитам. Интеграция с TeamCity.}
@@ -282,13 +284,13 @@ YouTrackSharp, или же неписать своего, использующе
 
 Система отвечает функциональным требованиям.
 Сам TeamCity состоит из http сервера и нескольких build agent'ов.
-Для одного из них потребуется 2GB RAM, dual-core CPU, 10GB долговременной памяти.
+Для одного из них потребуется 2GB RAM, dual-core CPU, 10GB долговременной памяти \cite{octopus}.
 Агентов лучше размещать на отдельных серверах, чтобы не перегружать первые, так как сборка - ресурсоёмкая и длительная по времени операция.
 
 Интеграция с системами контроля версий доступны "из коробки", также при желании можно воспользоватся API, или, что гораздо удобнее,
 готовым клиентом на kotlin https://github.com/JetBrains/teamcity-rest-client
 \\\\
-\textbf{функциональные возможности}
+\textbf{функциональные возможности \cite{teamcity}}
 \begin{enumerate}
     \item{интеграция c CVS}
     % Build, check and run automated tests on the server even before committing your changes – keeping your code base clean at all times.
@@ -337,31 +339,51 @@ YouTrackSharp, или же неписать своего, использующе
     \end{figure}
 }
 
-\diaa{diags/1.png}{Архитектура github.com}
-\diaa{diags/2.png}{балансировщик}
+\diaa{diags/1.png}{Архитектура github.com \cite{github}}
+\diaa{diags/2.png}{балансировщик \cite{github,nmap_github}}
 \pagebreak
-\diaa{diags/databases.png}{базы данных}
-\diaa{diags/file-server.png}{файл сервера}
+\diaa{diags/databases.png}{базы данных \cite{github}}
+\diaa{diags/file-server.png}{файл сервера \cite{github}}
 \pagebreak
-\diaa{diags/frontend.png}{frontend сервер}
+\diaa{diags/frontend.png}{frontend сервер \cite{github}}
 \pagebreak
-\diaa{diags/github.png}{часть архитектуры}
+\diaa{diags/github.png}{часть архитектуры \cite{github,nmap_github}}
 \pagebreak
-\diaa{diags/Diagram1.png}{архитектура предприятия}
+\diaa{diags/Diagram1.png}{архитектура предприятия \cite{nmap_build_server,nmap_prod_server,nmap_youtrack_server}}
 \pagebreak
 
 \pagebreak
 
 \section{Список использованных источников}
-blog.github.com/2009-10-20-how-we-made-github-fast/\\
-wiki.xenproject.org/wiki/Xen\_Project\_Beginners\_Guide\\
-business.radario.ru\\
-приватная вики на гитхабе\\
-jetbrains.com/youtrack/features/\\
-youtrack-support.jetbrains.com/hc/en-us/articles/206546119-What-hardware-requirements-does-YouTrack-have-\\
-octopus.com/docs/installation/requirements\\
+
+\begin{thebibliography}{9}
+    \bibitem{github}  
+    \textit{blog.github.com/2009-10-20-how-we-made-github-fast/}
+     
+    \bibitem{xen}
+    \textit{wiki.xenproject.org/wiki/Xen\_Project\_Beginners\_Guide}
+     
+    \bibitem{radario}
+    \textit{business.radario.ru}
+
+    \bibitem{wiki}
+    \textit{приватная вики на гитхабе}
+
+    \bibitem{youtrack}
+    \textit{jetbrains.com/youtrack/features/}
+
+    \bibitem{youtrack_requirements}
+    \textit{youtrack-support.jetbrains.com/hc/en-us/articles/206546119-What-hardware-requirements-does-YouTrack-have-}
+
+    \bibitem{octopus}
+    \textit{octopus.com/docs/installation/requirements}
+
+    \bibitem{teamcity}
+    \textit{jetbrains.com/teamcity/features/}
 
 результаты сканирования серверов
+
+\bibitem{nmap_github}
 \begin{lstlisting}[language=bash, basicstyle=\ttfamily\small]
     $ nmap -O github.com
 \end{lstlisting}
@@ -380,10 +402,10 @@ octopus.com/docs/installation/requirements\\
     No exact OS matches for host (test conditions non-ideal).
 \end{lstlisting}
 
+\bibitem{nmap_youtrack_server}
 \begin{lstlisting}[language=bash, basicstyle=\ttfamily\small]
     $ nmap -O ***.myjetbrains.com
 \end{lstlisting}
-
 \begin{lstlisting}[frame=lines, basicstyle=\ttfamily\small]
     ...
     PORT    STATE SERVICE
@@ -398,10 +420,10 @@ octopus.com/docs/installation/requirements\\
     ...
 \end{lstlisting}
 
+\bibitem{nmap_prod_server}
 \begin{lstlisting}[language=bash, basicstyle=\ttfamily\small]
     $ nmap -O m***.ru
 \end{lstlisting}
-
 \begin{lstlisting}[frame=lines, basicstyle=\ttfamily\small]
     ...
     PORT    STATE SERVICE
@@ -412,11 +434,10 @@ octopus.com/docs/installation/requirements\\
     Running: Microsoft Windows 2012
     ...
 \end{lstlisting}
-
+\bibitem{nmap_build_server}
 \begin{lstlisting}[language=bash, basicstyle=\ttfamily\small]
     $ nmap -O -Pn bo**.ru
 \end{lstlisting}
-
 \begin{lstlisting}[frame=lines, basicstyle=\ttfamily\small]
     ...
     PORT     STATE SERVICE
@@ -429,5 +450,6 @@ octopus.com/docs/installation/requirements\\
     Running (JUST GUESSING): Microsoft Windows 2012|10|7|Phone (92%), FreeBSD 6.X (85%)
     ...
 \end{lstlisting}
+\end{thebibliography}
 
 \end{document}
