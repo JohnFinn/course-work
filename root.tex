@@ -21,6 +21,15 @@
 % определение понятий «информационная система»,
 % используемых видов архитектур ИС, элементов, составляющих используемые виды
 % архитектур, других специальных понятий, используемых в курсовой работе;
+информационная система
+гипервизор
+frontend сервер
+балансировщик
+DRBD
+публичный ключ
+RAID 10
+Unix domain socket
+хэш
 
 \pagebreak
 
@@ -341,48 +350,39 @@ YouTrackSharp, или же неписать своего, использующе
 Реализована асинхронная балансировка нагрузки c 2мя балансировщиками (если один упадёт, другой на подхвате). Так же есть 2 сервера с базами данных 4 пары файл серверов.
 \diaa{diags/1.png}{Архитектура github.com \cite{github}}
 
-The first thing your request hits after coming down from the internet is the active load balancer. For this task we use a pair of Xen instances running ldirectord. These are called lb1a and lb1b. At any given time one of these is active and the other is waiting to take over in case of a failure in the master. The load balancer doesn’t do anything fancy. It forwards TCP packets to various servers based on the requested IP and port and can remove misbehaving servers from the balance pool if necessary. In the event that no servers are available for a given pool it can serve a simple static site instead of refusing connections.
+На серверах балансировщиках установлены гипервизоры XEN. Неизвестно сколько и каких там операционных систем, но точно есть система, которая может контролировать сам гипервизор и linux, на которой стоит балансировщик, распределяющий нагрузку по frnotend серверам и nginx, отдающий web страницу, в случае если все сервера не доступны.
 \diaa{diags/2.png}{балансировщик \cite{github,nmap_github}}
 \pagebreak
 
-Many pages require database lookups. Our MySQL database runs on two 8 core, 32GB RAM bare metal servers with 15k RPM SAS drives. Their names are db1a and db1b. At any given time, one of them is master and one is slave. MySQL replication is accomplished via DRBD.
+Каждый сервер с базами данных обладает следующими характеристиками:
+два 8ми ядерных процессора, 32GB оперативной памяти, 15k RPM SAS диски. Данные для MySQL копируются с помощью DRBD.
+В MySQL хранятся публичные ключи пользователей, права пользователей.
+В Redis хранится информация о том, на каком файл-сервере хранятся репозитории пользователя.
 \diaa{diags/databases.png}{базы данных \cite{github}}
 
-Once the Smoke proxy has determined the user’s route, it establishes a transparent proxy to the proper file server. We have four pairs of fileservers. Their names are fs1a, fs1b, …, fs4a, fs4b. These are 8 core, 16GB RAM bare metal servers, each with six 300GB 15K RPM SAS drives arranged in RAID 10. At any given time one server in each pair is active and the other is waiting to take over should there be a fatal failure in the master. All repository data is constantly replicated from the master to the slave via DRBD.
+На файл серверах хранятся репозитории пользователя. Тут не возникает проблемы синхронизации данных в распределенных системах.
 
-The above flow is what happens when there are no cache hits. In many cases the Rails code uses Evan Weaver’s Ruby memcached client to query the Memcache servers that run on each slave file server. Since these machines are otherwise idle, we place 12GB of Memcache on each. These servers are aliased as memcache1, …, memcache4.
+Каждый файл сервер дублируется, по той же причине, что и сервера баз данных и баансировщики. Данные копируются постоянно с помощью DRBD. В каждом сервере 8ми ядерные процессоры, по 8GB оперативной памяти и по шесть 300GB 15K RPM SAS дисков, объединённых в RAID 10.
+
+Так как дублирующие сервера не нагружены в основное время, на них работают сервера кэширования, объединённые в кластер. Сервера кэширования хранят информацию о репозиториях.
 \diaa{diags/file-server.png}{файл сервера \cite{github}}
 \pagebreak
 
-For requests to the main website, the load balancer ships your request off to one of the four frontend machines. Each of these is an 8 core, 16GB RAM bare metal server. Their names are fe1, …, fe4. Nginx accepts the connection and sends it to a Unix domain socket upon which sixteen Unicorn worker processes are selecting. One of these workers grabs the request and runs the Rails code necessary to fulfill it.
+Frontend сервера обладают 8ми ядерными процессорами, 16GB оперативной памяти. На них запущен nginx, обрабатывающий HTTP запросы, sshd, обрабатывающий ssh запросы. ProxyMachine'ы обрабытывают git запросы.
+
+Nginx передаёт запросы unicorn'у через unix domain socket.
+unicorn если не обнаруживает в кэшэ нужной информации, обращаются к ProxyMachine, которые на основе имени пользователя обращаются к нужному файл серверу.
+
+Из Git запроса достаётся имя пользователя и подставляется путь до нужного файл сервера из redis.
+sshd запрашивает права пользователя из MySQL, путь у Redis, и вместо выполнения указанной команды, делает ssh запрос к файл серверу и подставляет комманду туда.
+
+Минус такого подхода - лишнее шифрование и расшифровка однако плюс - простота и элегантность.
 \diaa{diags/frontend.png}{frontend сервер \cite{github}}
 \pagebreak
 
-First, your Git client initiates an SSH session. The connection comes down off the internet and hits our load balancer.
+В итоговой архитектуре есть узкое место при обращении к базе данных, однако большая часть информации может быть легко разнесена по файл серверам.
 
-From there, the connection is sent to one of the frontends where SSHD accepts it. We have patched our SSH daemon to perform public key lookups from our MySQL database. Your key identifies your GitHub user and this information is sent along with the original command and arguments to our proprietary script called Gerve (Git sERVE). Think of Gerve as a super smart version of git-shell.
-
-Gerve verifies that your user has access to the repository specified in the arguments. If you are the owner of the repository, no database lookups need to be performed, otherwise several SQL queries are made to determine permissions.
-
-Once access has been verified, Gerve uses Chimney to look up the route for the owner of the repository. The goal now is to execute your original command on the proper file server and hook your local machine up to that process. What better way to do this than with another remote SSH execution!
-
-I know it sounds crazy but it works great. Gerve simply uses exec(3) to replace itself with a call tossh git@<route> <command> <arg>. After this call, your client is hooked up to a process on a frontend machine which is, in turn, hooked up to a process on a file server.
-
-Think of it this way: after determining permissions and the location of the repository, the frontend becomes a transparent proxy for the rest of the session. The only drawback to this approach is that the internal SSH is unnecessarily encumbered by the overhead of encryption/decryption when none is strictly required. It’s possible we may replace this this internal SSH call with something more efficient, but this approach is just too damn simple (and still very fast) to make me worry about it very much.
-
-Tracing a Git Request
-
-Performing public clones and pulls via Git is similar to how the SSH method works. Instead of using SSH for authentication and encryption, however, it relies on a server side Git Daemon. This daemon accepts connections, verifies the command to be run, and then uses fork(2) and exec(3) to spawn a worker that then becomes the command process.
-
-With this in mind, I’ll show you how a public clone operation works.
-
-First, your Git client issues a request containing the command and repository name you wish to clone. This request enters our system on the load balancer.
-
-From there, the request is sent to one of the frontends. Each frontend runs four ProxyMachine instances behind HAProxy that act as routing proxies for the Git protocol. The proxy inspects the request and extracts the username (or gist name) of the repo. It then uses Chimney to lookup the route. If there is no route or any other error is encountered, the proxy speaks the Git protocol and sends back an appropriate messages to the client. Once the route is known, the repo name (e.g. mojombo/bert) is translated into its path on disk (e.g. a/a8/e2/95/mojombo/bert.git). On our old setup that had no proxies, we had to use a modified daemon that could convert the user/repo into the correct filepath. By doing this step in the proxy, we can now use an unmodified daemon, allowing for a much easier upgrade path.
-
-Next, the Git proxy establishes a transparent proxy with the proper file server and sends the modified request (with the converted repository path). Each file server runs two Git Daemon processes behind HAProxy. The daemon speaks the pack file protocol and streams data back through the Git proxy and directly to your Git client.
-
-Once your client has all the data, you’ve cloned the repository and can get to work!
+Кэширование помогает перенести нагрузку с сервера базы данных на большую часть времени простаивающие резервные файл сервера. Получается масштабирование системы упирается в масштабирование кэш серверов, что в свою очередь упирается в то, на сколько хорошо будет угадываться нужный сервер на основе хэша.
 \diaa{diags/github.png}{часть архитектуры \cite{github,nmap_github}}
 \pagebreak
 
