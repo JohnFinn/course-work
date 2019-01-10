@@ -1,1 +1,10 @@
 **~
+diags/
+*.pdf
+*.fls
+*.log
+*.pyg
+*.gz
+*.toc
+*.aux
+*.fdb_latexmk
