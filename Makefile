@@ -6,5 +6,5 @@ diags: diagrams
 		do dia "diagrams/$$diagram" -e $@/"$$diagram".png;\
 	done
 
-default: pictures diags root.tex
+root.pdf: pictures diags root.tex
 	pdflatex root.tex
