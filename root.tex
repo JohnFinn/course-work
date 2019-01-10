@@ -329,12 +329,32 @@ YouTrackSharp, или же неписать своего, использующе
 % надежности и безопасности ИС. Описание спроектированной архитектуры
 % сопровождается диаграммами, выполненными в соответствии с требованиями нотации
 % UML.
-\includegraphics[width=\textwidth]{Diagram1.png}
+
+\newcommand{\diaa}[2]{
+    \begin{figure}[!h]
+        \includegraphics[width=\textwidth]{#1}
+        \caption{#2}
+    \end{figure}
+}
+
+\diaa{diags/1.png}{Архитектура github.com}
+\diaa{diags/2.png}{балансировщик}
+\pagebreak
+\diaa{diags/databases.png}{базы данных}
+\diaa{diags/file-server.png}{файл сервера}
+\pagebreak
+\diaa{diags/frontend.png}{frontend сервер}
+\pagebreak
+\diaa{diags/github.png}{часть архитектуры}
+\pagebreak
+\diaa{diags/Diagram1.png}{архитектура предприятия}
+\pagebreak
 
 \pagebreak
 
 \section{Список использованных источников}
 blog.github.com/2009-10-20-how-we-made-github-fast/\\
+wiki.xenproject.org/wiki/Xen\_Project\_Beginners\_Guide\\
 business.radario.ru\\
 приватная вики на гитхабе\\
 jetbrains.com/youtrack/features/\\
